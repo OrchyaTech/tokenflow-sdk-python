@@ -1,15 +1,15 @@
-# TokenFlow Python SDK (local draft)
+# TokenFlow Python SDK
 
-This is an **unpublished MIT-licensed review draft** for TokenFlow's current hosted BYOK text endpoint. Do not upload it to a public repository or package registry until the owner approves publication. It contains no gateway implementation or patent formulas.
+The MIT-licensed Python client for TokenFlow's hosted BYOK text endpoint. The client is available as [`orchya-tokenflow-sdk` on PyPI](https://pypi.org/project/orchya-tokenflow-sdk/). It contains no gateway implementation or patent formulas.
 
 TokenFlow accepts a TokenFlow tenant key and **your own provider key** separately. This client supports a bounded single-turn text call (one optional system message and one user message) and a text stream. It does not claim native compatibility with every IDE, desktop app, model, agent framework, or provider protocol.
 
-## Local installation
+## Installation
 
-From this directory, in a Python 3.10+ virtual environment:
+In a Python 3.10+ virtual environment:
 
 ```sh
-python -m pip install -e .
+python -m pip install orchya-tokenflow-sdk
 ```
 
 Set your secrets in the local process environment, not in source control. This PowerShell example hides keystrokes; the plaintext still exists in the process environment while the example runs:
@@ -27,9 +27,9 @@ function Set-SecretEnv([string]$Name) {
 }
 Set-SecretEnv 'TOKENFLOW_API_KEY'
 Set-SecretEnv 'OPENAI_API_KEY'
-python examples\single_turn.py
-Remove-Item Env:TOKENFLOW_API_KEY, Env:OPENAI_API_KEY
 ```
+
+Run the Python example below in the same shell. When finished, clear the process environment variables with `Remove-Item Env:TOKENFLOW_API_KEY, Env:OPENAI_API_KEY`. The [repository example](examples/single_turn.py) can also be run from a source checkout.
 
 The keys are sent over HTTPS to TokenFlow as `Authorization: Bearer ...` and `X-Provider-Key`, respectively. TokenFlow receives the prompt and provider credential in order to forward this call; BYOK does **not** mean the gateway cannot see them in transit. Use a restricted provider key and review your provider's terms and limits. Do not expose either key in browser JavaScript, logs, screenshots, or a public repository.
 
@@ -62,6 +62,8 @@ The SDK has **no automatic retries**. Catch `TokenFlowAPIError` and inspect `sta
 The gateway's supported-model list and API contract may change. Test your actual tool's request shape before advertising compatibility. The SDK does not intercept network packets or third-party desktop traffic.
 
 ## Development
+
+From a source checkout:
 
 ```sh
 python -m pip install -e '.[test]'
